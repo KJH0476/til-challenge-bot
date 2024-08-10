@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* src/App.css */
+@font-face {
+    font-family: 'Jalnan2';
+    src: url('./assets/fonts/Jalnan2TTF.ttf') format('truetype'); /* .otf 파일인 경우 format('opentype')으로 변경 */
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 기본 글꼴 설정 */
+body {
+    font-family: 'Jalnan2', sans-serif;
+}
