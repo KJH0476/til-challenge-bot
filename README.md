@@ -35,5 +35,6 @@ TIL 챌린지에서는 매주 매니저님이 `TIL N월 N주차`라는 메시지
 
 ## 🎯 내가 고려한 부분
 - [왜 서버리스로 구현함?](docs/%EC%99%9C%20%EC%84%9C%EB%B2%84%EB%A6%AC%EC%8A%A4%EB%A1%9C%20%EA%B5%AC%ED%98%84%ED%95%A8%3F.md)
+- [문제점과 개선한점](docs/%EB%AC%B8%EC%A0%9C%EC%A0%90%EA%B3%BC%20%EA%B0%9C%EC%84%A0%ED%95%9C%EC%A0%90.md)
 
 ## 🎯 시스템 아키텍처
