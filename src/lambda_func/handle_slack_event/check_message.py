@@ -45,7 +45,7 @@ def check_thread_from_til_msg(event_data: Dict[str, Any]) -> Union[bool, str]:
             - 해당 메시지가 TIL 챌린지 게시글에 달린 메시지가 아닌 경우 False 반환
             - 메시지가 TIL 챌린지 게시글에 달린 경우, 해당 메세지에 대한 정보("TIL 몇월 몇주차") 반환
     """
-    timestamps = get_object_from_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'])
+    timestamps = get_object_from_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'])
     this_month = timestamps['timestamps']['this_month']
     
     if event_data['thread_ts'] not in timestamps['timestamps'][this_month]:
@@ -83,7 +83,7 @@ def check_rm_til_msg(event_data: Dict[str, Any]) -> bool:
     Returns:
         bool: 삭제된 스레드 메시지가 TIL 챌린지 게시글의 스레드인 경우 True, 아니면 False
     """
-    timestamps = get_object_from_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'])
+    timestamps = get_object_from_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'])
     this_month = timestamps['timestamps']['this_month']
 
     deleted_ts = event_data['previous_message']['thread_ts']

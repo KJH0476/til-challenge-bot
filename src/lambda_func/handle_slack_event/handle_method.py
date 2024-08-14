@@ -35,7 +35,7 @@ def handle_reaction_added(event_data: Dict[str, Any], user_info: Dict[str, Any])
                             user['reaction_count'] += 1
                             join_week[parent_ts][event_data['item']['ts']]['total'] += 1
                             
-                        put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+                        put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
                         
                         send_message_channel(os.environ['ADMIN_ID'], f"{user['name']} : {event_data['item']['ts']} 글에 좋아요 +1")
                         break
@@ -69,7 +69,7 @@ def handle_reaction_removed(event_data: Dict[str, Any], user_info: Dict[str, Any
                         
                         user['reaction_count'] -= 1
                         join_week[parent_ts][event_data['item']['ts']]['total'] -= 1
-                        put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+                        put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
                         
                         send_message_channel(os.environ['ADMIN_ID'], f"{user['name']} : {event_data['item']['ts']} 글에 좋아요 -1")
                         break
@@ -107,7 +107,7 @@ def handle_channel_message(event_data: Dict[str, Any], user_info: Dict[str, Any]
         user_info: 사용자 정보 딕셔너리
     """
     try:
-        timestamps: dict = get_object_from_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'])
+        timestamps: dict = get_object_from_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'])
         ts: str = event_data['ts']
         this_month = timestamps['timestamps']['this_month']
         
@@ -136,8 +136,8 @@ def handle_channel_message(event_data: Dict[str, Any], user_info: Dict[str, Any]
                         info['join_week'] = {}
                     info['join_week'][ts] = dict()
                 
-                put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'], timestamps)
-                put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+                put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'], timestamps)
+                put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
     except Exception as e:
         logger.error("Error occurred: %s", str(e))
         error_message = f"Error occurred: {str(e)}"
@@ -166,12 +166,12 @@ def handle_thread_message(event_data: Dict[str, Any], user_info: Dict[str, Any])
             
             join_week[event_data['ts']] = dict(total=0, has_link=True, like={})
             
-            put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+            put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
             
             send_message_channel(event_data['channel'], f"{user['name']}이 {check_message} 챌린지에 참여하였습니다 :fire::fire:")
         else:
             join_week[event_data['ts']] = dict(total=0, has_link=False, like={})
-            put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+            put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
             
     except Exception as e:
         logger.error("Error occurred: %s", str(e))
@@ -199,7 +199,7 @@ def handle_deleted_message(event_data: Dict[str, Any], user_info: Dict[str, Any]
             user['reaction_count'] -= join_week[event_data['previous_message']['ts']]['total']
             del join_week[event_data['previous_message']['ts']]
             
-            put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+            put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
             
             send_message_channel(os.environ['ADMIN_ID'], f"{user['name']}이 챌린지 글을 삭제하였습니다.")
         
@@ -234,7 +234,7 @@ def handle_edited_message(event_data: Dict[str, Any], user_info: Dict[str, Any])
             if event_data['message']['ts'] not in join_week:
                 join_week[event_data['ts']] = dict(total=0, has_link=True, like={})
             
-                put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+                put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
             
                 send_message_channel(event_data['channel'], f"{user['name']}이 챌린지에 참여하였습니다 :fire::fire:")
             else:
@@ -245,7 +245,7 @@ def handle_edited_message(event_data: Dict[str, Any], user_info: Dict[str, Any])
                     
                     user['reaction_count'] += join_week[event_data['message']['ts']]['total']
                     
-                    put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'], user_info)
+                    put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'], user_info)
                     
                     send_message_channel(os.environ['ADMIN_ID'], f"{user['name']}이 {event_data['message']['ts']} 에 링크를 추가했습니다.")
                     send_message_channel(event_data['channel'], f"{user['name']}이 {check_message} 챌린지에 참여하였습니다 :fire::fire:")

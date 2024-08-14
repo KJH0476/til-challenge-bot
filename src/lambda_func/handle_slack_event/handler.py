@@ -20,7 +20,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     print(f"event: {event}")
     
     body = json.loads(event['Records'][0]['body']) # SQS 메세지 바디
-    user_info = get_object_from_s3("til-challenge-bucket", os.environ['BUCKET_DIR_INFO'])   # 사용자 정보
+    user_info = get_object_from_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_INFO'])   # 사용자 정보
     
     # Event Bridge 에 의해 트리거될 때 실행
     if 'trigger' in body:

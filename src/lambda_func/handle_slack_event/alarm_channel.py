@@ -18,7 +18,7 @@ def auto_send_message(event: Dict[str, Any], user_info:  Dict[str, Any]) -> None
         send_message_channel(os.environ['TIL_CHANNEL'], event['message'])
     else:
         
-        timestamps: dict = get_object_from_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'])
+        timestamps: dict = get_object_from_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'])
         
         prev_month = timestamps['timestamps']['this_month']
         ts_in_month = timestamps['timestamps'][prev_month]
@@ -57,7 +57,7 @@ def auto_send_message(event: Dict[str, Any], user_info:  Dict[str, Any]) -> None
         timestamps['timestamps'][str(month)] = dict()
         timestamps['timestamps']['this_month'] = str(month)
         
-        put_object_to_s3("til-challenge-bucket", os.environ['BUCKET_DIR_TIMESTAMP'], timestamps)
+        put_object_to_s3(os.environ['BUCKET'], os.environ['BUCKET_DIR_TIMESTAMP'], timestamps)
         
     return
 
