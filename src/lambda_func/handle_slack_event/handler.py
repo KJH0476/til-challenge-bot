@@ -8,7 +8,7 @@ from alarm_channel import auto_send_message
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
-    AWS Lambda 핸들러 함수. Slack 이벤트를 처리합니다.
+    AWS Lambda 핸들러 함수. Slack 이벤트를 처리
 
     Params:
         event: Lambda 함수로 전달된 이벤트 데이터
