@@ -128,13 +128,16 @@ export function MainChart() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const [userResponse, timestampResponse] = await Promise.all([
-                    fetch(`${process.env.REACT_APP_USER_INFO_URL}`),
-                    fetch(`${process.env.REACT_APP_TIMESTAMP_URL}`)
-                ]);
+                const response = await fetch(`${process.env.REACT_APP_APIGATEWAY_URL}`);
 
-                const userData: ResponseData = await userResponse.json();
-                const timestampData: TimestampData = await timestampResponse.json();
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+
+                const data = await response.json();
+
+                const userData: ResponseData = await data.user_info;
+                const timestampData: TimestampData = await data.timestamps_info;
 
                 setUserData(userData);
 
